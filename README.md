@@ -1,7 +1,7 @@
 # INFO2-PremiersPasPDO
 
-### NOM : DOE
-### Prénom : John
+### NOM : BOCQUILLON
+### Prénom : Louis
 ### Groupe de TP : 
 - [X] TD1
 - [ ] TD2
