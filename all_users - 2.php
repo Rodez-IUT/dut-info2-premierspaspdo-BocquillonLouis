@@ -45,8 +45,8 @@
             Première lettre du prénom : <input type="text" name="lettre"><br>
             Status du compte :
             <select name="status">
-                <option value="active">Active account</option>
-                <option value="waiting">Waiting for account validation</option>
+                <option value="2">Active account</option>
+                <option value="1">Waiting for account validation</option>
             </select>
             <br/><input type="submit" value="Effectuer la recherche">
         </form>
@@ -57,19 +57,14 @@
 
                 // Vérifier qu'une seule lettre à été saisie
                 if (strlen($_POST['lettre']) == 1) {
-                    $lettre = $_POST['lettre'];
+                    $lettre = htmlspecialchars($_POST['lettre']);
                 } else {
                     echo "ERREUR ! Vous ne devez saisir qu'une seule lettre.";
                     echo "La recherche s'effectue donc pour tous les utilisateurs avec le status sélectionné.";
                     $lettre = "";
                 }
 
-                // Chercher l'ID du status
-                if (strcmp($_POST['status'], "active") == 0) {
-                    $status = 2;
-                } else {
-                    $status = 1;
-                }
+                $status = $_POST['status'];
 
                 // Préparation requête
                 $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id WHERE s.id = $status AND username LIKE '$lettre%' ORDER BY username");
