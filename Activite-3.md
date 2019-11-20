@@ -1,0 +1,2 @@
+On ne vérifie pas si la chaîne saisie est bien une lettre, donc on peut rentrer ce qu'on veut. 
+Ici, la chaîne saisie commence par "a%'", ce qui ferme la chaîne utilisée avec LIKE. Et donc la suite du texte saisi n'est pas interprété comme uns String, et n'est pas conforme au SQL. La requête est donc erronée, et une exception est levée.

@@ -52,6 +52,7 @@
         </form>
 
         <?php
+            // Vérifier qu'on est passés par le formulaire
             if (isset($_POST['status']) && isset($_POST['lettre'])) {
 
                 // Vérifier qu'une seule lettre à été saisie
@@ -70,35 +71,37 @@
                     $status = 1;
                 }
 
-
                 // Préparation requête
                 $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id WHERE s.id = $status AND username LIKE '$lettre%' ORDER BY username");
 
+            // Sinon on affiche le tableau par défaut avec tous les utilisateurs
             } else {
                 $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id ORDER BY username");
             }
-                // Entête tableau
-                echo"<h1>All users</h1>";
-                echo "<table border=\"1px\">";
+
+            // Afficher le tableau
+            // Entête tableau
+            echo"<h1>All users</h1>";
+            echo "<table border=\"1px\">";
+            echo "<tr>";
+            echo "<th>Id</th>";
+            echo "<th>Username</th>";
+            echo "<th>Email</th>";
+            echo "<th>Status</th>";
+            echo "</tr>";
+
+            // Récupération des données
+            while($row = $stmt->fetch()){
+
+                // Récupération des données et affichage
                 echo "<tr>";
-                echo "<th>Id</th>";
-                echo "<th>Username</th>";
-                echo "<th>Email</th>";
-                echo "<th>Status</th>";
+                echo "<td>".$row['user_id']."</td>";
+                echo "<td>".$row['username']."</td>";
+                echo "<td>".$row['email']."</td>";
+                echo "<td>".$row['status']."</td>";
                 echo "</tr>";
-
-                // Récupération des données
-                while($row = $stmt->fetch()){
-
-                    // Récupération des données et affichage
-                    echo "<tr>";
-                    echo "<td>".$row['user_id']."</td>";
-                    echo "<td>".$row['username']."</td>";
-                    echo "<td>".$row['email']."</td>";
-                    echo "<td>".$row['status']."</td>";
-                    echo "</tr>";
-                }
-                echo "</table>";
+            }
+            echo "</table>";
         ?>
         </table>
     </body>
