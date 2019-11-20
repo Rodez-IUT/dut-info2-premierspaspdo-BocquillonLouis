@@ -40,7 +40,7 @@
             }
         
             // Préparation requête
-            $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id ORDER BY username");
+            $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id WHERE s.id = 2 AND username LIKE 'e%' ORDER BY username");
             
             // Entête tableau
             echo"<h1>All users</h1>";
