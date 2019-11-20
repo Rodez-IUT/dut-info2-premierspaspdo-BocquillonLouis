@@ -38,32 +38,67 @@
             } catch (PDOException $e) {
                  throw new PDOException($e->getMessage(), (int)$e->getCode());
             }
-        
-            // Préparation requête
-            $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id WHERE s.id = 2 AND username LIKE 'e%' ORDER BY username");
-            
-            // Entête tableau
-            echo"<h1>All users</h1>";
-            echo "<table border=\"1px\">";
-            echo "<tr>";
-            echo "<th>Id</th>";
-            echo "<th>Username</th>";
-            echo "<th>Email</th>";
-            echo "<th>Status</th>";
-            echo "</tr>";
+        ?>
 
-            // Récupération des données
-            while($row = $stmt->fetch()){
+        <!-- Formulaire -->
+        <form method="post" action="all_users - 2.php" ID="formRecherche">
+            Première lettre du prénom : <input type="text" name="lettre"><br>
+            Status du compte :
+            <select name="status">
+                <option value="active">Active account</option>
+                <option value="waiting">Waiting for account validation</option>
+            </select>
+            <br/><input type="submit" value="Effectuer la recherche">
+        </form>
 
-                // Récupération des données et affichage
-                echo "<tr>";
-                echo "<td>".$row['user_id']."</td>";
-                echo "<td>".$row['username']."</td>";
-                echo "<td>".$row['email']."</td>";
-                echo "<td>".$row['status']."</td>";
-                echo "</tr>";
+        <?php
+            if (isset($_POST['status']) && isset($_POST['lettre'])) {
+
+                // Vérifier qu'une seule lettre à été saisie
+                if (strlen($_POST['lettre']) == 1) {
+                    $lettre = $_POST['lettre'];
+                } else {
+                    echo "ERREUR ! Vous ne devez saisir qu'une seule lettre.";
+                    echo "La recherche s'effectue donc pour tous les utilisateurs avec le status sélectionné.";
+                    $lettre = "";
+                }
+
+                // Chercher l'ID du status
+                if (strcmp($_POST['status'], "active") == 0) {
+                    $status = 2;
+                } else {
+                    $status = 1;
+                }
+
+
+                // Préparation requête
+                $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id WHERE s.id = $status AND username LIKE '$lettre%' ORDER BY username");
+
+            } else {
+                $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id ORDER BY username");
             }
-            echo "</table>";
+                // Entête tableau
+                echo"<h1>All users</h1>";
+                echo "<table border=\"1px\">";
+                echo "<tr>";
+                echo "<th>Id</th>";
+                echo "<th>Username</th>";
+                echo "<th>Email</th>";
+                echo "<th>Status</th>";
+                echo "</tr>";
+
+                // Récupération des données
+                while($row = $stmt->fetch()){
+
+                    // Récupération des données et affichage
+                    echo "<tr>";
+                    echo "<td>".$row['user_id']."</td>";
+                    echo "<td>".$row['username']."</td>";
+                    echo "<td>".$row['email']."</td>";
+                    echo "<td>".$row['status']."</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
         ?>
         </table>
     </body>
