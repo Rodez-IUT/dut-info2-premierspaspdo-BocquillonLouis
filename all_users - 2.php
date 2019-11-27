@@ -47,7 +47,7 @@
             <select name="status">
                 <option value="2">Active account</option>
                 <option value="1">Waiting for account validation</option>
-                <!-- <option value="3">Waiting for account deletion</option> -->
+                <option value="3">Waiting for account deletion</option>
             </select>
             <br/><input type="submit" value="Effectuer la recherche">
         </form>
@@ -55,15 +55,6 @@
         <?php
             // Vérifier qu'on est passés par le formulaire
             if (isset($_POST['status']) && isset($_POST['lettre'])) {
-
-                // // Vérifier qu'une seule lettre à été saisie
-                // if (strlen($_POST['lettre']) == 1) {
-                //     $lettre = htmlspecialchars($_POST['lettre']);
-                // } else {
-                //     echo "ERREUR ! Vous ne devez saisir qu'une seule lettre.";
-                //     echo "La recherche s'effectue donc pour tous les utilisateurs avec le status sélectionné.";
-                //     $lettre = "";
-                // }
 
                 $status = $_POST['status'];
 
