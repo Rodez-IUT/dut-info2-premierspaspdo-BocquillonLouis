@@ -47,6 +47,7 @@
             <select name="status">
                 <option value="2">Active account</option>
                 <option value="1">Waiting for account validation</option>
+                <!-- <option value="3">Waiting for account deletion</option> -->
             </select>
             <br/><input type="submit" value="Effectuer la recherche">
         </form>
@@ -55,19 +56,23 @@
             // Vérifier qu'on est passés par le formulaire
             if (isset($_POST['status']) && isset($_POST['lettre'])) {
 
-                // Vérifier qu'une seule lettre à été saisie
-                if (strlen($_POST['lettre']) == 1) {
-                    $lettre = htmlspecialchars($_POST['lettre']);
-                } else {
-                    echo "ERREUR ! Vous ne devez saisir qu'une seule lettre.";
-                    echo "La recherche s'effectue donc pour tous les utilisateurs avec le status sélectionné.";
-                    $lettre = "";
-                }
+                // // Vérifier qu'une seule lettre à été saisie
+                // if (strlen($_POST['lettre']) == 1) {
+                //     $lettre = htmlspecialchars($_POST['lettre']);
+                // } else {
+                //     echo "ERREUR ! Vous ne devez saisir qu'une seule lettre.";
+                //     echo "La recherche s'effectue donc pour tous les utilisateurs avec le status sélectionné.";
+                //     $lettre = "";
+                // }
 
                 $status = $_POST['status'];
 
                 // Préparation requête
-                $stmt = $pdo->query("SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id WHERE s.id = $status AND username LIKE '$lettre%' ORDER BY username");
+                $lettre = $_POST['lettre'].'%';
+
+                $sql = "SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id WHERE s.id = :status AND username LIKE :lettre ORDER BY username";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute(['lettre' => $lettre, 'status' => $status]);
 
             // Sinon on affiche le tableau par défaut avec tous les utilisateurs
             } else {
