@@ -57,12 +57,13 @@
             if (isset($_POST['status']) && isset($_POST['lettre'])) {
 
                 $status = $_POST['status'];
-
-                // Préparation requête
                 $lettre = $_POST['lettre'].'%';
 
+                // Préparation requête
                 $sql = "SELECT users.id AS user_id, username, email, s.name AS status FROM users JOIN status s ON users.status_id = s.id WHERE s.id = :status AND username LIKE :lettre ORDER BY username";
+                // On enlève traite la chaîne pour que la requête SQL se passe bien
                 $stmt = $pdo->prepare($sql);
+                // On exécute la requête
                 $stmt->execute(['lettre' => $lettre, 'status' => $status]);
 
             // Sinon on affiche le tableau par défaut avec tous les utilisateurs
