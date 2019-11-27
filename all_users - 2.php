@@ -80,6 +80,7 @@
             echo "<th>Username</th>";
             echo "<th>Email</th>";
             echo "<th>Status</th>";
+            echo "<th>Deletion</th>";
             echo "</tr>";
 
             // Récupération des données
@@ -91,6 +92,11 @@
                 echo "<td>".$row['username']."</td>";
                 echo "<td>".$row['email']."</td>";
                 echo "<td>".$row['status']."</td>";
+                if ($row['status'] != "Waiting for account deletion") {
+                    echo "<td>Ask Deletion</td>";
+                } else {
+                    echo "<td>/</td>";
+                }
                 echo "</tr>";
             }
             echo "</table>";
